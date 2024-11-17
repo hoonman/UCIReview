@@ -25,11 +25,23 @@ const CreatePost = ({}) => {
         [name]: value
       }
     })
+    console.log("review: ", review);
   }
   const location = useLocation();
   const queryParams = new URLSearchParams(window.location.search);
   const selectedProf = queryParams.get('professor');
   const selectedCourse = queryParams.get('course');
+  // would like to set review object's professor when the selected professor changes
+  useEffect(() => {
+    setReview((prev) => {
+      return {
+        ...prev,
+        professor: selectedProf,
+        course: selectedCourse
+      }
+    })
+  }
+  , [selectedProf, selectedCourse])
   return (
     <div>
       <form className="review-form">
