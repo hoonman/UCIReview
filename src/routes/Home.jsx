@@ -20,25 +20,87 @@ const Home = () => {
   const [selectedCourse, setSelectedCourse] = useState('');
   const [selectedProfessor, setSelectedProfessor] = useState('');
 
+  const [profIdNameMap, setProfIdNameMap] = useState({});
+
   // populate the courses and professors using the peterportalAPI
   useEffect(() => {
     const fetchCourses = async () => {
       const response = await fetch('https://api.peterportal.org/rest/v0/courses/all');
+      // const response = await fetch('https://1tgg4m2pra.execute-api.us-east-2.amazonaws.com/prod/courses?subject=COMPSCI');
       const data = await response.json();
-      setCourses(data);
+      console.log("data: ", data);
+      // go through the data and find courses that are "department: Computer Science" and update the data
+      const filteredData = data.filter((course) => course.department === "COMPSCI");
+      console.log("filteredData: ", filteredData);
+
+      // setCourses(data);
+      setCourses(filteredData);
     }
 
     const fetchProfessors = async () => {
       const response = await fetch('https://api.peterportal.org/rest/v0/instructors/all');
       const data = await response.json();
+      // go through the professor list and associate the prof id (ucinetid) to prof name (name)
+      const profMap = {};
+      for (let i = 0; i < data.length; i++) {
+        profMap[data[i].ucinetid] = data[i].name;
+      }
+      console.log("profMap: ", profMap);
+      setProfIdNameMap(profMap);
       setProfessors(data);
     }
     fetchCourses();
     fetchProfessors();
+
+    // go through the data and find courses that are "department: Computer Science" and update the data
   }, [])
   useEffect(() => {
     // whenever selected course changes, we fetch the relevant professors for professors useState variable list
+    // go through the professors list and find the professors that teach the selected course
+    // the api structure looks like this (for courses:)
 
+    // {
+    //   id: "COMPSCI103",
+    //   department: "COMPSCI",
+    //   number: "103",
+    //   school: "Donald Bren School of Information and Computer Sciences",
+    //   title: "Advanced Programming and Problem Solving with C++",
+    //   course_level: "Upper Division (100-199)",
+    //   department_alias: [
+    //   "CS"
+    //   ],
+    //   units: [
+    //   4,
+    //   4
+    //   ],
+    //   description: "Advanced programming language concepts for more complex, higher performance software design. Builds depth of programming skills in C++ as a foundation for upper-division courses and projects. Focuses on strengthening programming, debugging, and problem solving skills.",
+    //   department_name: "Computer Science",
+    //   professor_history: [
+    //   "klefstad"
+    //   ]
+    // }
+    
+    // implement below:
+    const filterProf = () => {
+      const profs = [];
+      for (let i = 0; i < courses.length; i++) {
+        if (courses[i].id === selectedCourse) {
+          for (let j = 0; j < courses[i].professor_history.length; j++) {
+            // each child in a list should have a unique "key" prop
+            profs.push({name: courses[i].professor_history[j]});
+          }
+          break;
+        }
+      }
+      return profs;
+    }
+    const profs = filterProf();
+    console.log("profs: ", profs);
+    // for each entry in profs, we need to associate that prof with a full name in the profIdNameMap
+    for (let i = 0; i < profs.length; i++) {
+      profs[i].name = profIdNameMap[profs[i].name];
+    }
+    setProfessors(profs);
   }, [selectedCourse])
 
   const handleChange = (e) => {
