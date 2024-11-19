@@ -22,6 +22,7 @@ function App() {
         <Route path="/create" element={<CreatePost></CreatePost>}></Route>
         <Route path="/reviews/edit/:id" element={<EditPost></EditPost>}></Route>
         <Route path="/search" element={<Search></Search>}></Route>
+        <Route path="/search/edit/:id" element={<EditPost></EditPost>}></Route>
         {/* <Route path="/search:" element={<Search></Search>}></Route> */}
       </Routes>
     </BrowserRouter>
