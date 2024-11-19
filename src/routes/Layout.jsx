@@ -10,6 +10,11 @@ const Layout = () => {
               Home
             </Link>
           </li>
+          <li className="reviews-link" key="reviews-button">
+            <Link style={{color: "white"}} to="/reviews">
+            Reviews
+            </Link>
+          </li>
         </ul>
       </nav>
       <Outlet />

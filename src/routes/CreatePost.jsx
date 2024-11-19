@@ -14,7 +14,7 @@ const CreatePost = ({}) => {
       .from('Reviews')
       .insert({professor: review.professor, course: review.course, description: review.description, rating: review.rating, difficulty: review.difficulty})
       .select();
-    // window.location = ""
+    window.location = "/reviews";
   }
 
   const handleChange = (event) => {
@@ -45,9 +45,7 @@ const CreatePost = ({}) => {
   return (
     <div>
       <form className="review-form">
-        {/* <label>Review for {selectedProf}</label> */}
         <h1 className="review-prof">Review: {selectedProf}</h1>
-        {/* <label>Course: {selectedCourse}</label> */}
         <h2 className="review-course">Course: {selectedCourse}</h2>
         <label>Description: </label>
         <textarea type="text" id="description" name="description" onChange={handleChange}></textarea>
